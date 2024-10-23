@@ -31,7 +31,7 @@ def doImport():
         "longitude": settings.OPEN_METEO_LONGITUDE,
         "past_days": 1,
         "forecast_days": 1,
-        "hourly": ['cloud_cover', 'direct_radiation'],
+        "hourly": ['cloud_cover', 'direct_radiation', 'diffuse_radiation'],
         "timezone": settings.OPEN_METEO_TIMEZONE
     }
 
