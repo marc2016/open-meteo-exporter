@@ -62,7 +62,7 @@ def doImport():
       if record_time > current_time - timedelta(hours=2):
          continue
       record={
-         "measurement": settings.INFLUXDB_MEASUREMENT,
+         "measurement": settings.OPEN_METEO_INFLUXDB_MEASUREMENT,
           "tags": {
               "system": settings.SYSTEM_NAME,
           },
