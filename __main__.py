@@ -55,8 +55,8 @@ def doImport():
     current_time = datetime.now() 
     # Prepare records for InfluxDB
     influx_records = []
-    for time, cloud, radiation in zip(data['hourly']['time'], data['hourly']['cloud_cover'], data['hourly']['direct_radiation']):
-      logging.debug(f"Time: {time}, Cloud Cover: {cloud}%, Direct Radiation: {radiation} W/m²")
+    for time, cloud, direct_radiation, diffuse_radiation in zip(data['hourly']['time'], data['hourly']['cloud_cover'], data['hourly']['direct_radiation'], data['hourly']['diffuse_radiation']):
+      logging.debug(f"Time: {time}, Cloud Cover: {cloud}%, Direct Radiation: {direct_radiation} W/m², Direct Radiation: {diffuse_radiation} W/m²")
       # Convert the time string to a datetime object
       record_time = datetime.fromisoformat(time)
       if record_time > current_time - timedelta(hours=2):
@@ -69,7 +69,8 @@ def doImport():
           "time": f"{time}:00Z",
           "fields": {
               "cloud_cover": cloud,
-              "direct_radiation": radiation,
+              "direct_radiation": direct_radiation,
+              "diffuse_radiation": diffuse_radiation
           },
       }
       # Add the record to the list
