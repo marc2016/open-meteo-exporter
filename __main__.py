@@ -31,8 +31,7 @@ def doImport():
         "longitude": settings.OPEN_METEO_LONGITUDE,
         "past_days": 1,
         "forecast_days": 1,
-        "hourly": ['cloud_cover', 'direct_radiation', 'diffuse_radiation'],
-        "timezone": settings.OPEN_METEO_TIMEZONE
+        "hourly": ['cloud_cover', 'direct_radiation', 'diffuse_radiation']
     }
 
     # Make the GET request
@@ -56,7 +55,7 @@ def doImport():
     # Prepare records for InfluxDB
     influx_records = []
     for time, cloud, direct_radiation, diffuse_radiation in zip(data['hourly']['time'], data['hourly']['cloud_cover'], data['hourly']['direct_radiation'], data['hourly']['diffuse_radiation']):
-      logging.debug(f"Time: {time}, Cloud Cover: {cloud}%, Direct Radiation: {direct_radiation} W/m², Direct Radiation: {diffuse_radiation} W/m²")
+      logging.debug(f"Time: {time}, Cloud Cover: {cloud}%, Direct Radiation: {direct_radiation} W/m², Diffuse Radiation: {diffuse_radiation} W/m²")
       # Convert the time string to a datetime object
       record_time = datetime.fromisoformat(time)
       if record_time > current_time - timedelta(hours=2):
