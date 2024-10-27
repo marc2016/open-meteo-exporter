@@ -28,8 +28,8 @@ def checkOldestDate():
         token=settings.INFLUXDB_TOKEN,
         org=settings.INFLUXDB_ORG)
   result_last_point_query = list(client.query_api().query(query))
-  client.close()
   if not result_last_point_query:
+     client.close()
      return
   time = result_last_point_query[0].records[0].values["_time"]
   logging.debug("Last record %s", time)
@@ -80,10 +80,11 @@ def checkOldestDate():
   influx_records_chunked = chunks(influx_records, 10000)
   write_api = client.write_api(write_options=SYNCHRONOUS)
   for chunk in influx_records_chunked:
-        write_api.write(org=settings.INFLUXDB_ORG, bucket=settings.INFLUXDB_BUCKET, record=chunk)
-        logging.debug("Datapoints in influxdb saved")
-  
+    write_api.write(org=settings.INFLUXDB_ORG, bucket=settings.INFLUXDB_BUCKET, record=chunk)
+    logging.debug("Datapoints in influxdb saved")
+
   write_api.close()
+  client.close()
   logging.info('Succeddfull added data to influx.')
 
 def doImport():
