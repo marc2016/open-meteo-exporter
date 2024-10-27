@@ -18,7 +18,8 @@ def checkOldestDate():
   query = f'''
     from(bucket: "{settings.INFLUXDB_BUCKET}")
     |> range(start: 0)  // Start from the beginning
-    |> filter(fn: (r) => r._measurement == "{settings.OPEN_METEO_INFLUXDB_MEASUREMENT}")  // Filter by measurement
+    |> filter(fn: (r) => r._measurement == "{settings.OPEN_METEO_INFLUXDB_MEASUREMENT}" // Filter by measurement
+              and r.system == "{settings.SYSTEM_NAME}")  // Filter by system
     |> sort(columns: ["_time"], desc: false)  // Sort by time in ascending order
     |> limit(n: 1)  // Limit to 1 record
     '''
@@ -27,8 +28,8 @@ def checkOldestDate():
         token=settings.INFLUXDB_TOKEN,
         org=settings.INFLUXDB_ORG)
   result_last_point_query = list(client.query_api().query(query))
+  client.close()
   if not result_last_point_query:
-     client.close()
      return
   time = result_last_point_query[0].records[0].values["_time"]
   logging.debug("Last record %s", time)
